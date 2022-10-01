@@ -1,0 +1,61 @@
+{%extends "shablon.html"%}
+
+{% block Title%}
+
+{%endblock%}
+
+{% block Body%}
+<body>
+    <header class="site-header sticky-top py-1">
+  <nav class="container d-flex flex-column flex-md-row justify-content-between">
+    <a class="py-2" href="/" aria-label="Main">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mx-auto" role="img" viewBox="0 0 24 24"><title>Product</title><circle cx="12" cy="12" r="10"></circle><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"></path></svg>
+    </a>
+    <a class="py-2 d-none d-md-inline-block" href="/search">Search</a>
+     <a class="py-2 d-none d-md-inline-block" href="/records">Records</a>
+    <a class="py-2 d-none d-md-inline-block" href="/about">About</a>
+    <a class="py-2 d-none d-md-inline-block" href="/pricing">Pricing</a>
+
+  </nav>
+</header>
+<main>
+
+    <div class="p-5 mb-4 bg-light rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Leave your feedback or wish.</h1>
+        <p class="col-md-8 fs-4">Speak out.</p>
+        <div class="form-floating">
+      <input type="text" class="form-control" id="floatingInput1" placeholder="Name">
+      <label for="floatingInput1">Name</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingInput2" placeholder="Email">
+      <label for="floatingInput2">Email</label>
+    </div>
+          <div class="form-floating">
+          <input type="text" class="form-control" id="floatingInput3" placeholder="Feedback">
+      <label for="floatingInput3">Feedback</label>
+    </div>
+          <a href="/" class="btn btn-success">Post</a>
+      </div>
+    </div>
+
+
+
+    <footer class="container py-5">
+  <div class="row">
+    <div class="col-12 col-md">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mb-2" role="img" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"></path></svg>
+      <small class="d-block mb-3 text-muted">© 2001–2022</small>
+</div>
+      </div>
+</footer>
+  </div>
+</main>
+
+
+
+
+
+</body>
+{% endblock%}
