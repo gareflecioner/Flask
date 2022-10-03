@@ -1,0 +1,22 @@
+{%extends "shablon.html"%}
+
+{% block Title%}
+
+{%endblock%}
+
+{% block Body%}
+
+>
+{% for el in back %}
+    <div class="container">
+        <h1>All reviews about the site.</h1>
+    <p><div class="alert alert-dark">
+    <h2>From: {{el.name}}</h2>
+    <p> {{el.email}}</p>
+    <b> <p> {{el.feedback}}</p></b>
+    <p> {{el.datetime.date()}}</p></div>
+        <a class="btn btn-success" href="/comment/{{el.id}}">More</a></p></div>
+{%   endfor  %}
+
+
+{% endblock %}

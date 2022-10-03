@@ -8,19 +8,20 @@ from datetime import datetime
 app=Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///base.db"
 
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS "]=False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
 
 
-class Registration(db.Model):
+class registration(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    surname = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    feedback = db.Column(db.String(50), nullable=False)
     datetime = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Regisration %r>' % self.id
+        return '<registration %r>' % self.id
 
 
 
@@ -28,9 +29,36 @@ class Registration(db.Model):
 def main():
     return render_template("main.html")
 
-@app.route("/feedback")
-def feedback():
-    return render_template("feedback.html")
+@app.route("/feedback",methods=["POST","GET"])
+def feed():
+    if request.method =="POST":
+        name=request.form["name"]
+        email=request.form["email"]
+        feedback=request.form["feedback"]
+        wishes=registration(name=name,email=email,feedback=feedback)
+
+        try:
+            db.session.add(wishes)
+            db.session.commit()
+            return redirect("/wishes")
+        except:
+            "Sorry"
+    else:
+        return render_template("feedback.html")
+
+
+@app.route("/wishes")
+def wish():
+    back=registration.query.order_by(registration.datetime.desc()).all()
+    return render_template("wish.html",back=back)
+
+
+@app.route("/comment/<int:id>")
+def comments(id):
+    comment=registration.query.get(id)
+    return render_template("comment.html",comment=comment)
+
+
 
 @app.route("/pricing")
 def pricing():
