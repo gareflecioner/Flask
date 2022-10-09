@@ -1,0 +1,19 @@
+{%extends "shablon.html"%}
+{% block Title %}
+Vinyl:{{papp.id}}
+{%endblock%}
+
+{% block Body%}
+
+<div class="container">
+        <h1>Paper.</h1>
+    <h2> {{papp.title[2:]}}</h2>
+    <p><div class="alert alert-dark">
+
+
+    <b> <p>{{papp.description}}</p></b></p>
+    </div>
+</div>
+
+
+{% endblock %}

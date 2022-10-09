@@ -1,0 +1,18 @@
+{%extends "shablon.html"%}
+{% block Title %}
+Vinyl:{{recordd.id}}
+{%endblock%}
+
+{% block Body%}
+
+<div class="container">
+        <h1>Records.</h1>
+    <p><div class="alert alert-dark">
+    <h2> {{recordd.title}}</h2>
+
+    <b> <p>{{recordd.description}}</p></b></p>
+    </div>
+</div>
+
+
+{% endblock %}

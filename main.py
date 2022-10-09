@@ -24,6 +24,25 @@ class registration(db.Model):
         return '<registration %r>' % self.id
 
 
+class vinyl(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    title = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+
+
+    def __repr__(self):
+        return '<vinyl %r>' % self.id
+
+
+class papers(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    title = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+
+
+    def __repr__(self):
+        return '<papers %r>' % self.id
+
 
 @app.route("/")
 def main():
@@ -73,6 +92,7 @@ def about():
 
 
 
+
 @app.route("/search")
 def search():
     return render_template("search.html")
@@ -80,13 +100,28 @@ def search():
 
 
 @app.route("/papers")
-def papers():
-    return render_template("papers.html")
+def books():
+    pap = papers.query.order_by(papers.id).all()
+    return render_template("papers.html",pap=pap)
+
+@app.route("/paper/<int:id>")
+def book(id):
+    papp = papers.query.get(id)
+    return render_template("paper.html",papp=papp)
+
+
 
 
 @app.route("/records")
 def records():
-    return render_template("records.html")
+    rec = vinyl.query.order_by(vinyl.id.desc()).all()
+    return render_template("records.html",rec=rec)
+
+@app.route("/record/<int:id>")
+def record(id):
+    recordd=vinyl.query.get(id)
+    return render_template("record.html",recordd=recordd)
+
 
 if __name__=="__main__":
     app.run(debug=-True)
