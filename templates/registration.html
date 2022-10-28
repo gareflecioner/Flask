@@ -12,6 +12,13 @@
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Sing up now.</h1>
         <p class="col-md-8 fs-4">Sing up.</p>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}. Go to <a href="{{ url_for('/login') }}">login page</a>.
+    </div>
+            {% endif %}
+            {% endwith %}
           <form method="post">
               <div class="form-floating">
       <input type="text" class="form-control" name="name" id="name" placeholder="Name">
@@ -42,4 +49,4 @@
 
 </body>
 {% endblock%}
-Footer
+
