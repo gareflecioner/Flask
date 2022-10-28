@@ -1,1 +1,49 @@
+{%extends "shablon.html"%}
+
+{% block Title%}
+
+{%endblock%}
+
+{% block Body%}
+
+<main>
+
+    <div class="p-5 mb-4 bg-light rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Sing up now.</h1>
+        <p class="col-md-8 fs-4">Sing up.</p>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}.
+    </div>
+            {% endif %}
+            {% endwith %}
+          <form method="post">
+              <div class="form-floating">
+      <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+      <label for="name">Name</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" class="form-control" name="email" id="email" placeholder="Email">
+      <label for="email">Email</label>
+    </div>
+          <div class="form-floating">
+      <input type="text" class="form-control" name="psw" id="psw" placeholder="Password">
+      <label for="psw">Password</label>
+    </div>
+       
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Sing in.</button></form>
+        </div>
+    </div>
+            </form>
+  </div>
+</main>
+
+
+
+
+
+</body>
+{% endblock%}
 
