@@ -12,20 +12,15 @@
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Leave your feedback or wish.</h1>
         <p class="col-md-8 fs-4">Speak out.</p>
-          <form method="post">
-              <div class="form-floating">
-      <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-      <label for="name">Name</label>
-    </div>
-    <div class="form-floating">
-      <input type="text" class="form-control" name="email" id="email" placeholder="Email">
-      <label for="email">Email</label>
-    </div>
-          <div class="form-floating">
-      <input type="text" class="form-control" name="feedback" id="feedback" placeholder="Feedback">
-      <label for="feedback">Feedback</label>
-    </div>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Post.</button></form>
+
+    <form action="/feedback" method="post" class="form-contact">
+            <p><label>Name: </label><input type="text" name="name"value=""required/> </p>
+            <p><label>Email: </label><input type="text" name="email"value=""required/> </p>
+            <p><label>Text: </label><input type="text" name="text"value=""required/> </p>
+
+            <p><input type="submit" value="Feedback"/>
+
+            <p><a href="{{url_for('main')}}">Back</a></p>
         </div>
     </div>
             </form>

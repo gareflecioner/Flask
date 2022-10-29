@@ -1,19 +1,22 @@
 {%extends "shablon.html"%}
 {% block Title %}
-Vinyl:{{papp.id}}
+Paper:{{papp.id}}
 {%endblock%}
 
 {% block Body%}
-
+<div class="text-bg-white me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
 <div class="container">
         <h1>Paper.</h1>
     <h2> {{papp.title[2:]}}</h2>
-    <p><div class="alert alert-dark">
+    <p><div class="alert alert-success">
 
 
     <b> <p>{{papp.description}}</p></b></p>
+     <p>{{pricee.markets}}</p>
+          <p>{{pricee.price}}</p>
+
     </div>
 </div>
-
+</div>
 
 {% endblock %}

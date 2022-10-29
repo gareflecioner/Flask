@@ -10,10 +10,10 @@
 
 <main>
     {% for el in rec[0:11] %}
-<div class="text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+<div class="text-bg-white me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">{{el.title}}</h2>
-        <p class="lead">{{el.description}}</p>
+
       </div>
       <a class="btn btn-outline-secondary" href="/record/{{el.id}}">More.</a>
 
