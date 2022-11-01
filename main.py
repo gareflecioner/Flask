@@ -3,11 +3,13 @@ import sqlite3
 import time
 from flask import Flask, render_template, request, redirect, url_for, flash, g, session
 from flask_bootstrap import Bootstrap
-from flask_login import UserMixin
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
+from flask_wtf import FlaskForm
+from wtforms import StringField,PasswordField,BooleanField,SubmitField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 app=Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///base.db"
@@ -15,6 +17,15 @@ app.config["SECRET_KEY"]="secret_key_i_love-attack-on-titan"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
+
+#login_manager=LoginManager()
+#login_manager.login_view="sing_in"
+#.init_app(app)
+
+
+#@login_manager.user_loader
+#def load_user(user_id):
+    #return User.query.get(int(user_id))
 
 
 class User(UserMixin, db.Model):
@@ -59,9 +70,39 @@ class papers(db.Model):
     def __repr__(self):
         return '<papers %r>' % self.id
 
+class RegistrationForm(FlaskForm):
+    name=StringField('name',validators=[DataRequired()])
+    email=StringField('email',validators=[DataRequired(),Email()])
+    password=PasswordField('Password',validators=[DataRequired()])
+    password2=PasswordField('Repeat Password',validators=[DataRequired(),EqualTo('password')])
+    submit=SubmitField('Register')
+
+    def validate_name(self,name):
+        user=User.query.filter_by(name=name.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different name')
+
+    def validate_email(self,email):
+        user=User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different e-mail')
+
+class LoginForm(FlaskForm):
+    email = StringField('email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me=BooleanField("Remember me")
+    submit=SubmitField("Sing in")
+
+@app.route("/logout")
+#@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
 @app.route("/profile")
+#@login_required
 def my_profile():
-    return render_template("profile.html")
+    return render_template("profile.html",name=current_user.name)
 
 
 @app.route("/")
@@ -88,19 +129,17 @@ def feed():
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
-    if request.method == "POST":
-        email = request.form.get('email')
-        password = request.form.get('psw')
-        remember = True if request.form.get('remember') else False
-        user = User.query.filter_by(email=email).first()
-        if not user or not check_password_hash(user.password, password):
-            flash('Please try again')
-            return redirect('/login')
-        else:
-            return redirect('/profile')
-            return render_template("profile.html")
-    else:
-        return render_template("login.html")
+    email = request.form.get('email')
+    password = request.form.get('psw')
+    remember = True if request.form.get('remember') else False
+    user = User.query.filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        flash('Please try again')
+        return redirect('/login')
+
+    login_user(user, remember=remember)
+    return redirect("/profile")
+
 
 
 @app.route("/register", methods=["POST", "GET"])
@@ -134,6 +173,7 @@ def wish():
 
 
 @app.route("/comment/<int:id>")
+#@login_required
 def comments(id):
     comment = registration.query.get(id)
     return render_template("comment.html", comment=comment)
@@ -161,6 +201,7 @@ def books():
 
 
 @app.route("/paper/<int:id>")
+#@login_required
 def book(id):
     papp = papers.query.get(id)
     return render_template("paper.html", papp=papp)
@@ -173,6 +214,7 @@ def records():
 
 
 @app.route("/record/<int:id>")
+#@login_required
 def record(id):
     recordd = vinyl.query.get(id)
     return render_template("record.html", recordd=recordd)

@@ -20,27 +20,22 @@
             {% endif %}
             {% endwith %}
           <form method="post" action="/login">
-              <div class="form-floating">
-      <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-      <label for="name">Name</label>
-    </div>
-    <div class="form-floating">
-      <input type="text" class="form-control" name="email" id="email" placeholder="Email">
-      <label for="email">Email</label>
-    </div>
-          <div class="form-floating">
-      <input type="text" class="form-control" name="psw" id="psw" placeholder="Password">
-      <label for="psw">Password</label>
-    </div>
-          <div class="field">
-                <label class="checkbox">
-                    <input type="checkbox">
-                    Remember me
-                </label>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Sing in.</button></form>
+     {{form.hidden_tag()}}
+              <p>
+              {{form.email.label}}<br>
+              {{form.name(size=64)}}<br>
+              </p>
+              <p>
+              {{form.password.label}}<br>
+              {{form.password(size=32)}}<br>
+              </p>
+              <p>
+              {{form.remember_me()}}{{form.remember_me.label}}<br>
+              {{form.submit()}}<br>
+
+              </p>
         </div>
-    </div>
-            </form>
+        </form>
   </div>
 </main>
 
