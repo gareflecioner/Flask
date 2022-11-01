@@ -93,6 +93,12 @@ class LoginForm(FlaskForm):
     remember_me=BooleanField("Remember me")
     submit=SubmitField("Sing in")
 
+class FeedForm(FlaskForm):
+    name = StringField('name', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Email()])
+    feed=StringField("feed", validators=[DataRequired()])
+    submit=SubmitField("Sing in")
+
 @app.route("/logout")
 #@login_required
 def logout():
@@ -129,23 +135,25 @@ def feed():
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
-    email = request.form.get('email')
-    password = request.form.get('psw')
-    remember = True if request.form.get('remember') else False
-    user = User.query.filter_by(email=email).first()
-    if not user or not check_password_hash(user.password, password):
-        flash('Please try again')
-        return redirect('/login')
+    if current_user.is_authenticatred:
+        return redirect(url_for("/profile"))
+    form=LoginForm()
+    if form.validate_on_submit():
+        user=User.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid email or password')
 
-    login_user(user, remember=remember)
+        return redirect('/login')
+        login_user(user, remember=form.remember_me.data)
     return redirect("/profile")
+    return render_template('login.html',form=form)
 
 
 
 @app.route("/register", methods=["POST", "GET"])
 def registration():
     if request.method == "POST":
-        session.pop('_flashes', None)
+
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["psw"]
