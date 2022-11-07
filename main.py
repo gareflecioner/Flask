@@ -18,14 +18,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
 
-#login_manager=LoginManager()
-#login_manager.login_view="sing_in"
-#.init_app(app)
+login_manager=LoginManager(app)
+login_manager.login_view="sing_in"
+#init_app(app)
 
 
-#@login_manager.user_loader
-#def load_user(user_id):
-    #return User.query.get(int(user_id))
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class User(UserMixin, db.Model):
@@ -34,10 +34,17 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(50), nullable=False,unique=True)
     password = db.Column(db.String(50), nullable=False)
     Created = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def set_password(self,password):
+        self.password_hash=generate_password_hash(password)
+        
+    def check_password(self,password):
+        return check_password_hash(self.password.hash,password)
 
     def __repr__(self):
         return '<User %r>' % self.id
-
+    
+#db with wishes
 class registration(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -136,44 +143,40 @@ def feed():
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
     if current_user.is_authenticatred:
-        return redirect(url_for("/profile"))
+        return redirect(url_for("my_profile"))
     form=LoginForm()
     if form.validate_on_submit():
         user=User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid email or password')
 
-        return redirect('/login')
+        return redirect(url_for('sing_in'))
         login_user(user, remember=form.remember_me.data)
-    return redirect("/profile")
+    return redirect(url_for("my_profile"))
     return render_template('login.html',form=form)
 
 
 
 @app.route("/register", methods=["POST", "GET"])
-def registration():
-    if request.method == "POST":
-
-        name = request.form["name"]
-        email = request.form["email"]
-        password = request.form["psw"]
-        password2 = request.form["psw2"]
-        if len(name) > 4 and len(email) > 4 and len(password) > 4 and password == password2 :
-            hash = generate_password_hash(request.form["psw"])
-            res = User(name=name, email=email, password=hash)
-            try:
-                db.session.add(res)
-                db.session.commit()
-                return redirect('/login')
-            except:
-                flash("Ошибка при добавлении пользователя")
-        else:
-            flash('Ошибка в заполнении форм')
-            return redirect('/register')
-    else:
-        return render_template("registration.html")
-
-
+def registration():    
+    if current_user.is_authenticatred:
+       return redirect(url_for("my_profile"))
+    form=RegistrationForm()
+    if form.validate_on_submit():
+        user=User(name=form.name.data,email=form.email.data)
+        user.set_password(form.password.data)
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('All ok,you are logged up)
+            return redirect(url_for('sing_in'))
+                  
+          except:
+              flash("Ошибка при добавлении пользователя")
+                  
+     return render_template("registration.html",form=form)
+    
+   
 @app.route("/wishes")
 def wish():
     back = registration.query.order_by(registration.datetime.desc()).all()
