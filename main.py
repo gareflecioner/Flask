@@ -112,9 +112,13 @@ def logout():
     logout_user()
     return redirect('/')
 
-@app.route("/profile")
+@app.route("/profile/<name>")
 #@login_required
-def my_profile():
+def my_profile(name):
+    name=User.query.filter_by(name=name).first_or_404()
+    posts=[
+        {'Author: ' user,'body' : 'test1}
+    ]
     return render_template("profile.html",name=current_user.name)
 
 
@@ -143,7 +147,7 @@ def feed():
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
     if current_user.is_authenticatred:
-        return redirect(url_for("my_profile"))
+        return redirect(url_for("main"))
     form=LoginForm()
     if form.validate_on_submit():
         user=User.query.filter_by(email=form.email.data).first()
@@ -152,7 +156,7 @@ def sing_in():
 
         return redirect(url_for('sing_in'))
         login_user(user, remember=form.remember_me.data)
-    return redirect(url_for("my_profile"))
+    return redirect(url_for("main"))
     return render_template('login.html',form=form)
 
 
@@ -160,7 +164,7 @@ def sing_in():
 @app.route("/register", methods=["POST", "GET"])
 def registration():    
     if current_user.is_authenticatred:
-       return redirect(url_for("my_profile"))
+       return redirect(url_for("main"))
     form=RegistrationForm()
     if form.validate_on_submit():
         user=User(name=form.name.data,email=form.email.data)
