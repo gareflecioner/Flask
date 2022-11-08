@@ -41,20 +41,22 @@ def main():
 
 @app.route("/feedback", methods=["POST", "GET"])
 def feed():
-    if request.method == "POST":
-        name = request.form["name"]
-        email = request.form["email"]
-        feedback = request.form["feedback"]
-        wishes = registration(name=name, email=email, feedback=feedback)
-
-        try:
-            db.session.add(wishes)
-            db.session.commit()
-            return redirect("/wishes")
-        except:
-            "Sorry"
+    if current_user.is_authenticatred:
+         form=FeedForm()
+         if form.validate_on_submit():
+            wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
+            try:
+                db.session.add(wishes)
+                db.session.commit()
+                flash('Сongratulations you left your review')
+                return redirect(url_for('wish'))
+            except:
+                "Sorry"
     else:
-        return render_template("feedback.html")
+        return redirect(url_for('sing_in'))
+         
+     return render_template("feedback.html",wishes=wishes)
+         
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
@@ -84,7 +86,7 @@ def registration():
         try:
             db.session.add(user)
             db.session.commit()
-            flash('All ok,you are logged up)
+            flash('All ok,you are logged up')
             return redirect(url_for('sing_in'))
                   
           except:
