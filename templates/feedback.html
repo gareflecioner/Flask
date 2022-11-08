@@ -12,7 +12,15 @@
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Leave your feedback or wish.</h1>
         <p class="col-md-8 fs-4">Speak out.</p>
-
+          
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}. Go to <a href="{{('/login') }}">login page</a>.
+    </div>
+            {% endif %}
+            {% endwith %}
+          
     <form action="/feedback" method="post" class="form-contact">
             <p><label>Name: </label><input type="text" name="name"value=""required/> </p>
             <p><label>Email: </label><input type="text" name="email"value=""required/> </p>
