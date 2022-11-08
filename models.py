@@ -9,7 +9,7 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 
 
-@login_manager.user_loader
+@login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
