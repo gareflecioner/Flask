@@ -51,7 +51,7 @@ def feed():
                 flash('Сongratulations you left your review')
                 return redirect(url_for('wish'))
             except:
-                "Sorry"
+                flash("Sorry")
     else:
         return redirect(url_for('sing_in'))
          
