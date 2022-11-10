@@ -5,6 +5,7 @@
 {%endblock%}
 
 {% block Body%}
+         
 
 <main>
 
@@ -22,11 +23,32 @@
             {% endwith %}
           
     <form action="/feedback" method="post" class="form-contact">
-            <p><label>Name: </label><input type="text" name="name"value=""required/> </p>
-            <p><label>Email: </label><input type="text" name="email"value=""required/> </p>
-            <p><label>Text: </label><input type="text" name="text"value=""required/> </p>
+            {{form.hidden_tag()}}
+              <p>
 
-            <p><input type="submit" value="Feedback"/>
+              {{form.name.label}}<br>
+              {{form.name(size=32)}}<br>
+              {%for error in form.name.errors%}
+              <span style="color : red;">[{{error}}]</span>
+              {%endfor%}
+              </p>
+          <p>
+
+              {{form.email.label}}<br>
+              {{form.email(size=64)}}<br>
+              {%for error in form.email.errors%}
+              <span style="color : red;">[{{error}}]</span>
+              {%endfor%}
+              </p>
+           <p>
+
+              {{form.feedback.label}}<br>
+              {{form.feedback(size=256)}}<br>
+              {%for error in form.feedback.errors%}
+              <span style="color : red;">[{{error}}]</span>
+              {%endfor%}
+              </p>
+           <p>{{form.submit()}}</p>
 
             <p><a href="{{url_for('main')}}">Back</a></p>
         </div>
