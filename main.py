@@ -146,7 +146,7 @@ def feed():
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
-    if current_user.is_authenticatred:
+    if current_user.is_authenticated:
         return redirect(url_for("main"))
     form=LoginForm()
     if form.validate_on_submit():
@@ -163,7 +163,7 @@ def sing_in():
 
 @app.route("/register", methods=["POST", "GET"])
 def registration():    
-    if current_user.is_authenticatred:
+    if current_user.is_authenticated:
        return redirect(url_for("main"))
     form=RegistrationForm()
     if form.validate_on_submit():
