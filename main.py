@@ -1,29 +1,28 @@
-import math
-import sqlite3
-import time
-from flask import Flask, render_template, request, redirect, url_for, flash, g, session
-from flask_bootstrap import Bootstrap
-from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash,check_password_hash
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, url_for, flash
 from datetime import datetime
+
+from flask import Flask, render_template, redirect, url_for, flash
+from flask_bootstrap import Bootstrap
+from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,BooleanField,SubmitField
+from werkzeug.security import generate_password_hash, check_password_hash
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 app=Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///base.db"
+app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///again.db"
 app.config["SECRET_KEY"]="secret_key_i_love-attack-on-titan"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
 
-login_manager=LoginManager(app)
-login_manager.login_view="sing_in"
-#init_app(app)
+login=LoginManager(app)
+login.login_view="sing_in"
+login.init_app(app)
 
 
-@login_manager.user_loader
+@login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
@@ -78,8 +77,8 @@ class papers(db.Model):
         return '<papers %r>' % self.id
 
 class RegistrationForm(FlaskForm):
-    name=StringField('name',validators=[DataRequired()])
-    email=StringField('email',validators=[DataRequired(),Email()])
+    name=StringField('Name',validators=[DataRequired()])
+    email=StringField('Email',validators=[DataRequired(),Email()])
     password=PasswordField('Password',validators=[DataRequired()])
     password2=PasswordField('Repeat Password',validators=[DataRequired(),EqualTo('password')])
     submit=SubmitField('Register')
@@ -116,9 +115,6 @@ def logout():
 #@login_required
 def my_profile(name):
     name=User.query.filter_by(name=name).first_or_404()
-    posts=[
-        {'Author: ' user,'body' : 'test1}
-    ]
     return render_template("profile.html",name=current_user.name)
 
 
@@ -129,26 +125,28 @@ def main():
 
 @app.route("/feedback", methods=["POST", "GET"])
 def feed():
-    if request.method == "POST":
-        name = request.form["name"]
-        email = request.form["email"]
-        feedback = request.form["feedback"]
-        wishes = registration(name=name, email=email, feedback=feedback)
-
-        try:
-            db.session.add(wishes)
-            db.session.commit()
-            return redirect("/wishes")
-        except:
-            "Sorry"
+    if current_user.is_authenticated:
+         form=FeedForm()
+         if form.validate_on_submit():
+            wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
+            try:
+                db.session.add(wishes)
+                db.session.commit()
+                flash('Сongratulations you left your review')
+                return redirect(url_for('wish'))
+            except:
+                flash("Sorry")
+         else:
+             flash("G")
     else:
-        return render_template("feedback.html")
+        return redirect(url_for('sing_in'))
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
-    if current_user.is_authenticatred:
+    if current_user.is_authenticated:
         return redirect(url_for("main"))
     form=LoginForm()
+
     if form.validate_on_submit():
         user=User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
@@ -163,7 +161,7 @@ def sing_in():
 
 @app.route("/register", methods=["POST", "GET"])
 def registration():    
-    if current_user.is_authenticatred:
+    if current_user.is_authenticated:
        return redirect(url_for("main"))
     form=RegistrationForm()
     if form.validate_on_submit():
@@ -172,13 +170,13 @@ def registration():
         try:
             db.session.add(user)
             db.session.commit()
-            flash('All ok,you are logged up)
+            flash('All ok,you are logged up')
             return redirect(url_for('sing_in'))
                   
-          except:
-              flash("Ошибка при добавлении пользователя")
-                  
-     return render_template("registration.html",form=form)
+        except:
+            flash("Ошибка при добавлении пользователя")
+
+    return render_template("registration.html",form=form)
     
    
 @app.route("/wishes")

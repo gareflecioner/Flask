@@ -22,9 +22,8 @@ def logout():
 #@login_required
 def my_profile(name):
     name=User.query.filter_by(name=name).first_or_404()
-    posts=[
-        {'Author: ' user,'body' : 'test1}
-    ]
+
+
     return render_template("profile.html",name=current_user.name)
 
 @app.route("/index")
@@ -55,7 +54,7 @@ def feed():
     else:
         return redirect(url_for('sing_in'))
          
-     return render_template("feedback.html",wishes=wishes)
+    return render_template("feedback.html",wishes=wishes)
          
 
 @app.route("/login", methods=["POST", "GET"])
@@ -89,10 +88,10 @@ def registration():
             flash('All ok,you are logged up')
             return redirect(url_for('sing_in'))
                   
-          except:
-              flash("Ошибка при добавлении пользователя")
+        except:
+            flash("Ошибка при добавлении пользователя")
                   
-     return render_template("registration.html",form=form)
+    return render_template("registration.html",form=form)
     
    
 @app.route("/wishes")
