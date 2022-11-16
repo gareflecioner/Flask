@@ -25,12 +25,12 @@ for block in nazvanie:
     description=block.find("div",class_="subtitle__description").text.strip()
     print(title)
     print(description)
-    add(title,description)
+    #add(title,description)
 for i in cena:
     market=i.find('a',class_="hawk-affiliate-link-merchantlink-label").text.strip()
     price = i.find('div', class_="hawk-display-price-price").strip()
     #add(title,description,market,price)
-    add(market,price)
+    #add(market,price)
     print(market)
     print(price)
 
