@@ -6,6 +6,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
+from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
@@ -169,12 +170,10 @@ def registration():
         user.set_password(form.password.data)
         try:
             db.session.add(user)
-            db.session.commit()
-            flash('All ok,you are logged up')
-            return redirect(url_for('sing_in'))
-                  
-        except:
-            flash("Ошибка при добавлении пользователя")
+            return db.session.commit()
+
+        except exc.IntegrityError:
+            db.session.rollback()
 
     return render_template("registration.html",form=form)
     
