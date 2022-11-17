@@ -5,7 +5,7 @@ import sqlite3
 url='https://www.womanandhome.com/life/books/the-25-best-books-of-all-time-for-your-must-read-listfrom-popular-fiction-to-classic-novels/'
 response=requests.get(url)
 soup=BeautifulSoup(response.content,"lxml")
-
+#записывается в бд корневой папки
 def add(title,description,market,price):
     conn=sqlite3.connect("base.db")
     cur = conn.cursor()
@@ -26,13 +26,13 @@ for block in nazvanie:
     print(title)
     print(description)
     #add(title,description)
-for i in cena:
-    market=i.find('a',class_="hawk-affiliate-link-merchantlink-label").text.strip()
-    price = i.find('div', class_="hawk-display-price-price").strip()
+#for i in cena:
+    #market=i.find('a',class_="hawk-affiliate-link-merchantlink-label").text.strip()
+    #price = i.find('div', class_="hawk-display-price-price")
     #add(title,description,market,price)
     #add(market,price)
-    print(market)
-    print(price)
+    #print(market)
+    #print(price)
 
 
 

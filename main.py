@@ -10,7 +10,7 @@ from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-
+#записывается в бд ,которая в instance
 app=Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///again.db"
 app.config["SECRET_KEY"]="secret_key_i_love-attack-on-titan"
@@ -169,6 +169,7 @@ def registration():
         user=User(name=form.name.data,email=form.email.data)
         user.set_password(form.password.data)
         try:
+
             db.session.add(user)
             return db.session.commit()
 
@@ -233,4 +234,4 @@ def record(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=-True)
+    app.run(debug=-True,use_reloader=False)
