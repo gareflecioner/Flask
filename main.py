@@ -13,7 +13,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 #записывается в бд ,которая в instance
 app=Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///again.db"
-app.config["SECRET_KEY"]="secret_key_i_love-attack-on-titan"
+app.config["SECRET_KEY"]="secret_key"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
@@ -166,15 +166,17 @@ def registration():
        return redirect(url_for("main"))
     form=RegistrationForm()
     if form.validate_on_submit():
-        user=User(name=form.name.data,email=form.email.data)
-        user.set_password(form.password.data)
+        password=generate_password_hash(form.password.data)
+        user=User(name=form.name.data,email=form.email.data,password=password)
         try:
 
             db.session.add(user)
-            return db.session.commit()
+            db.session.commit()
 
-        except exc.IntegrityError:
-            db.session.rollback()
+            return render_template(url_for('sing_in'))
+
+        except TypeError :
+            return db.session.rollback()
 
     return render_template("registration.html",form=form)
     
