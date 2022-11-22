@@ -1,5 +1,7 @@
-import requests
-from flask import Flask, render_template, redirect, url_for, flash
+from urllib import request
+
+
+from flask import Flask, render_template, redirect, url_for, flash,request
 from datetime import datetime
 
 from flask import Flask, render_template, redirect, url_for, flash
@@ -41,7 +43,7 @@ class User(UserMixin, db.Model):
         self.password_hash=generate_password_hash(password)
         
     def check_password(self,password):
-        return check_password_hash(self.password_hash,password)
+        return check_password_hash(self.password,password)
 
     def __repr__(self):
         return '<User %r>' % self.id
@@ -151,17 +153,15 @@ def sing_in():
     if current_user.is_authenticated:
         return redirect(url_for("sing_in"))
     form=LoginForm()
-
     if form.validate_on_submit():
         user=User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password_hash(form.password.data,password):
+        if user is None or not user.check_password(form.password.data):
             flash('Invalid email or password')
-
             return redirect(url_for('sing_in'))
         login_user(user, remember=form.remember_me.data)
-        next_page=requests.args.get('next')
+        next_page=request.args.get('next')
         if not next_page or url_parse(next_page).netlock != '':
-            next_page=url_for("next")
+            next_page=url_for('index')
         return redirect(next_page)
     return render_template('login.html',form=form)
 
