@@ -1,13 +1,15 @@
+import requests
 from flask import Flask, render_template, redirect, url_for, flash
 from datetime import datetime
 
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
-from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
+from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import url_parse
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 #записывается в бд ,которая в instance
@@ -18,7 +20,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
 
-login=LoginManager(app)
+login=LoginManager()
 login.login_view="sing_in"
 login.init_app(app)
 
@@ -39,7 +41,7 @@ class User(UserMixin, db.Model):
         self.password_hash=generate_password_hash(password)
         
     def check_password(self,password):
-        return check_password_hash(self.password.hash,password)
+        return check_password_hash(self.password_hash,password)
 
     def __repr__(self):
         return '<User %r>' % self.id
@@ -107,13 +109,13 @@ class FeedForm(FlaskForm):
     submit=SubmitField("Sing in")
 
 @app.route("/logout")
-#@login_required
+@login_required
 def logout():
     logout_user()
     return redirect('/')
 
 @app.route("/profile/<name>")
-#@login_required
+@login_required
 def my_profile(name):
     name=User.query.filter_by(name=name).first_or_404()
     return render_template("profile.html",name=current_user.name)
@@ -126,44 +128,49 @@ def main():
 
 @app.route("/feedback", methods=["POST", "GET"])
 def feed():
-    if current_user.is_authenticated:
-         form=FeedForm()
-         if form.validate_on_submit():
-            wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
-            try:
-                db.session.add(wishes)
-                db.session.commit()
-                flash('Сongratulations you left your review')
-                return redirect(url_for('wish'))
-            except:
-                flash("Sorry")
-         else:
-             flash("G")
+    #if current_user.is_authenticated:
+    form=FeedForm()
+    if form.validate_on_submit():
+        wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
+        try:
+            db.session.add(wishes)
+            db.session.commit()
+            flash('Сongratulations you left your review')
+            return redirect(url_for('wish'))
+        except:
+            flash("Sorry")
+    #else:
+         #flash("G")
     else:
         return redirect(url_for('sing_in'))
+
+        #return render_template('feedback.html',form=form)
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
     if current_user.is_authenticated:
-        return redirect(url_for("main"))
+        return redirect(url_for("sing_in"))
     form=LoginForm()
 
     if form.validate_on_submit():
         user=User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if user is None or not user.check_password_hash(form.password.data,password):
             flash('Invalid email or password')
 
-        return redirect(url_for('sing_in'))
+            return redirect(url_for('sing_in'))
         login_user(user, remember=form.remember_me.data)
-    return redirect(url_for("main"))
+        next_page=requests.args.get('next')
+        if not next_page or url_parse(next_page).netlock != '':
+            next_page=url_for("next")
+        return redirect(next_page)
     return render_template('login.html',form=form)
 
 
 
 @app.route("/register", methods=["POST", "GET"])
-def registration():    
+def reg():
     if current_user.is_authenticated:
-       return redirect(url_for("main"))
+       return redirect(url_for("sing_in"))
     form=RegistrationForm()
     if form.validate_on_submit():
         password=generate_password_hash(form.password.data)
@@ -173,7 +180,7 @@ def registration():
             db.session.add(user)
             db.session.commit()
 
-            return render_template(url_for('sing_in'))
+            return redirect(url_for('sing_in'))
 
         except TypeError :
             return db.session.rollback()
@@ -188,7 +195,7 @@ def wish():
 
 
 @app.route("/comment/<int:id>")
-#@login_required
+@login_required
 def comments(id):
     comment = registration.query.get(id)
     return render_template("comment.html", comment=comment)
@@ -216,7 +223,7 @@ def books():
 
 
 @app.route("/paper/<int:id>")
-#@login_required
+@login_required
 def book(id):
     papp = papers.query.get(id)
     return render_template("paper.html", papp=papp)
@@ -229,7 +236,7 @@ def records():
 
 
 @app.route("/record/<int:id>")
-#@login_required
+@login_required
 def record(id):
     recordd = vinyl.query.get(id)
     return render_template("record.html", recordd=recordd)
