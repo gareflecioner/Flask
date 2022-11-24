@@ -1,19 +1,16 @@
 from urllib import request
-
-
-from flask import Flask, render_template, redirect, url_for, flash,request
 from datetime import datetime
-
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash,request
 from flask_bootstrap import Bootstrap
 from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+
+
 #записывается в бд ,которая в instance
 app=Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///again.db"
@@ -38,16 +35,16 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(50), nullable=False,unique=True)
     password = db.Column(db.String(50), nullable=False)
     Created = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     def set_password(self,password):
         self.password_hash=generate_password_hash(password)
-        
+
     def check_password(self,password):
         return check_password_hash(self.password,password)
 
     def __repr__(self):
         return '<User %r>' % self.id
-    
+
 #db with wishes
 class registration(db.Model):
     id=db.Column(db.Integer,primary_key=True)
