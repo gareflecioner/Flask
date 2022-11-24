@@ -5,7 +5,6 @@ from init import login,db
 
 
 
-
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

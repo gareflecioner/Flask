@@ -3,8 +3,6 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 #from flask_migrate import Migrate
 from flask_login import LoginManager
-import routers,forms,models
-#from models import User,registration,vinyl,papers
 
 
 
@@ -17,7 +15,6 @@ bootstrap=Bootstrap(app)
 login=LoginManager()
 login.login_view="sing_in"
 login.init_app(app)
-
 
 
 
