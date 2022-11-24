@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(50), nullable=False)
     Created = db.Column(db.DateTime, default=datetime.utcnow)
     
-     def __repr__(self):
+    def __repr__(self):
         return '<User %r>' % self.id
     
     def set_password(self,password):
