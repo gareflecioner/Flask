@@ -116,9 +116,8 @@ def logout():
 @app.route("/profile/<name>")
 @login_required
 def my_profile(name):
-    name=User.query.filter_by(name=name).first_or_404()
-    time=User.query.filter_by(User.Created.desc()).first_or_404()
-    return render_template("profile.html",name=current_user.name,time=time)
+    user=User.query.filter_by(name=name).first_or_404()
+    return render_template("profile.html",user=user)
 
 
 @app.route("/")
@@ -127,9 +126,10 @@ def main():
 
 
 @app.route("/feedback", methods=["POST", "GET"])
+@login_required
 def feed():
-    if current_user.is_authenticated:
-        return redirect (url_for('sing_in'))
+    #if current_user.is_authenticated:
+        #return redirect (url_for('sing_in'))
     form=FeedForm()
     if form.validate_on_submit():
         wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
@@ -140,9 +140,6 @@ def feed():
             return redirect(url_for('wish'))
         except Exception as a:
             print("Sorry"+str(a))
-    #else:
-        #return redirect(url_for('sing_in'))
-
     return render_template('feedback.html',form=form)
 
 @app.route("/login", methods=["POST", "GET"])

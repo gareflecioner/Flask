@@ -5,12 +5,7 @@
 {%endblock%}
 
 {% block Body%}
-
-    <h1>User: {{ name }}</h1>
-    <hr>
-    {% for time in times %}
-    <p>
-    {{ name }} :registration <b>{{ time }}</b>
-    </p>
-    {% endfor %}
+<main>
+    <h1>User: {{ user.name }}</h1>
+</main>
 {% endblock %}
