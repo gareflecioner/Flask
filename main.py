@@ -130,16 +130,17 @@ def main():
 def feed():
     #if current_user.is_authenticated:
         #return redirect (url_for('sing_in'))
-    form=FeedForm()
-    if form.validate_on_submit():
-        wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
-        try:
-            db.session.add(wishes)
-            db.session.commit()
-            flash('Сongratulations you left your review')
-            return redirect(url_for('wish'))
-        except Exception as a:
-            print("Sorry"+str(a))
+    if request.method=='POST':
+        form=FeedForm()
+        if form.validate_on_submit():
+            wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
+            try:
+                db.session.add(wishes)
+                db.session.commit()
+                flash('Сongratulations you left your review')
+                return redirect(url_for('wish'))
+            except Exception as a:
+                print(str(a))
     return render_template('feedback.html',form=form)
 
 @app.route("/login", methods=["POST", "GET"])
