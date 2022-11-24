@@ -132,7 +132,8 @@ def main():
 @app.route("/feedback", methods=["POST", "GET"])
 def feed():
     if current_user.is_authenticated:
-        form=FeedForm()
+        return redirect (url_for('sing_in'))
+    form=FeedForm()
     if form.validate_on_submit():
         wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
         try:
@@ -141,11 +142,9 @@ def feed():
             flash('Сongratulations you left your review')
             return redirect(url_for('wish'))
         except Exception as a:
-            flash("Sorry"+str(a))
+            print("Sorry"+str(a))
     #else:
-         #flash("G")
-    else:
-        return redirect(url_for('sing_in'))
+        #return redirect(url_for('sing_in'))
 
     return render_template('feedback.html',form=form)
 
