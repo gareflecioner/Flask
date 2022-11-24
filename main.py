@@ -120,7 +120,8 @@ def logout():
 @login_required
 def my_profile(name):
     name=User.query.filter_by(name=name).first_or_404()
-    return render_template("profile.html",name=current_user.name)
+    time=User.query.filter_by(User.Created.desc()).first_or_404()
+    return render_template("profile.html",name=current_user.name,time=time)
 
 
 @app.route("/")
@@ -130,8 +131,8 @@ def main():
 
 @app.route("/feedback", methods=["POST", "GET"])
 def feed():
-    #if current_user.is_authenticated:
-    form=FeedForm()
+    if current_user.is_authenticated:
+        form=FeedForm()
     if form.validate_on_submit():
         wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
         try:
@@ -139,14 +140,14 @@ def feed():
             db.session.commit()
             flash('Сongratulations you left your review')
             return redirect(url_for('wish'))
-        except:
-            flash("Sorry")
+        except Exception as a:
+            flash("Sorry"+str(a))
     #else:
          #flash("G")
     else:
         return redirect(url_for('sing_in'))
 
-        #return render_template('feedback.html',form=form)
+    return render_template('feedback.html',form=form)
 
 @app.route("/login", methods=["POST", "GET"])
 def sing_in():
@@ -161,8 +162,8 @@ def sing_in():
         login_user(user, remember=form.remember_me.data)
         next_page=request.args.get('next')
         if not next_page or url_parse(next_page).netlock != '':
-            next_page=url_for('index')
-        return redirect(next_page)
+            next_page=url_for('main')
+            return redirect(next_page)
     return render_template('login.html',form=form)
 
 

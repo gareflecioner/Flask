@@ -31,12 +31,22 @@
             <li class="nav-item">
             <a class="nav-link" href="/about">About</a>
           </li>
+
+             {% if current_user.is_anonymous %}
+            <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('reg') }}">Sing up</a>
+            </li>
              <li class="nav-item">
-            <a class="nav-link" href="/login">Sing in</a>
+            <a class="nav-link" href="{{ url_for('sing_in') }}">Sing in</a>
             </li>
+            {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="/register">Sing up</a>
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
             </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('my_profile', name=current_user.name) }}">Profile</a>
+          </li>
+            {% endif %}
              <li class="nav-item">
             <a class="nav-link" href="/feedback">Feedback</a>
           </li>
