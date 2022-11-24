@@ -83,7 +83,7 @@ class RegistrationForm(FlaskForm):
     email=StringField('Email',validators=[DataRequired(),Email()])
     password=PasswordField('Password',validators=[DataRequired()])
     password2=PasswordField('Repeat Password',validators=[DataRequired(),EqualTo('password')])
-    submit=SubmitField('Register')
+    submit=SubmitField('Sing up')
 
     def validate_name(self,name):
         user=User.query.filter_by(name=name.data).first()
@@ -96,16 +96,16 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different e-mail')
 
 class LoginForm(FlaskForm):
-    email = StringField('email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me=BooleanField("Remember me")
     submit=SubmitField("Sing in")
 
 class FeedForm(FlaskForm):
-    name = StringField('name', validators=[DataRequired()])
-    email = StringField('email', validators=[DataRequired(), Email()])
-    feed=StringField("feed", validators=[DataRequired()])
-    submit=SubmitField("Sing in")
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    feed=StringField("Feedback", validators=[DataRequired()])
+    submit=SubmitField("Do it")
 
 @app.route("/logout")
 @login_required
@@ -130,10 +130,11 @@ def main():
 def feed():
     #if current_user.is_authenticated:
         #return redirect (url_for('sing_in'))
+    form=FeedForm()
     if request.method=='POST':
-        form=FeedForm()
+    #form=FeedForm()
         if form.validate_on_submit():
-            wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feedback.data)
+            wishes = registration(name=form.name.data, email=form.email.data, feedback=form.feed.data)
             try:
                 db.session.add(wishes)
                 db.session.commit()
