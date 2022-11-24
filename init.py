@@ -3,8 +3,8 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 #from flask_migrate import Migrate
 from flask_login import LoginManager
-
-from models import User,registration,vinyl,papers
+import routers,forms,models
+#from models import User,registration,vinyl,papers
 
 
 
@@ -23,5 +23,3 @@ login.init_app(app)
 
 if __name__ == "__main__":
     app.run(debug=-True)
-    
-import routers, models,forms
