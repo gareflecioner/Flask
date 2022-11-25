@@ -17,7 +17,7 @@
           {% with messages = get_flashed_messages() %}
             {% if messages %}
     <div class="notification is-danger">
-        {{ messages[0] }}. Go to <a href="{{('/login') }}">login page</a>.
+        {{ messages[0] }}. If you want you can subscribe <a href="{{url_for('pricing') }}">to our service</a>
     </div>
             {% endif %}
             {% endwith %}
@@ -49,8 +49,6 @@
               {%endfor%}
               </p>
            <p>{{form.submit()}}</p>
-
-            <p><a href="{{url_for('main')}}">Back</a></p>
         </div>
     </div>
             </form>

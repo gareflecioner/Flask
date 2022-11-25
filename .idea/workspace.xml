@@ -45,7 +45,7 @@
       <force-push-target remote-path="origin" branch="f" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.parcingrecords">
     <configuration name="init" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -132,10 +132,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.parcingrecords" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.init" />
         <item itemvalue="Python.parcingpapers" />
-        <item itemvalue="Python.parcingrecords" />
       </list>
     </recent_temporary>
   </component>

@@ -5,15 +5,13 @@
 {%endblock%}
 
 {% block Body%}
-
+<div class="blog-post-title mb-1">All reviews about the site.</div>
 
 {% for el in back %}
 <div class="text-bg-white me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
     <div class="container">
-        <h1>All reviews about the site.</h1>
     <p><div class="alert alert-success">
     <h2>From: {{el.name}}</h2>
-    <p> {{el.email}}</p>
     <b> <p> {{el.feedback}}</p></b>
     <p> {{el.datetime.date()}}</p></div>
         <a class="btn btn-success" href="/comment/{{el.id}}">More</a></p></div></div>
