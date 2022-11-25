@@ -116,8 +116,8 @@ def logout():
 @app.route("/profile/<name>")
 @login_required
 def my_profile(name):
-    user=User.query.filter_by(name=name).first_or_404()
-    return render_template("profile.html",user=user)
+    username=User.query.filter_by(name=name).first_or_404()
+    return render_template("profile.html",username=username)
 
 
 @app.route("/")

@@ -1,13 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 import sqlite3
-
 url='https://www.radiox.co.uk/features/best-vinyl-records-to-collect/'
 response=requests.get(url)
 soup=BeautifulSoup(response.content,"lxml")
 
 def add(title,description):
-    conn=sqlite3.connect("again.db")
+
+    conn=sqlite3.connect('instance/again.db')
     cur = conn.cursor()
     cur.execute("""
     INSERT INTO vinyl (title,description)
