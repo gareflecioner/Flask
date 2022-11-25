@@ -18,7 +18,6 @@ app.config["SECRET_KEY"]="secret_key"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 db=SQLAlchemy(app)
 bootstrap=Bootstrap(app)
-
 login=LoginManager()
 login.login_view="sing_in"
 login.init_app(app)
@@ -185,6 +184,7 @@ def reg():
     
    
 @app.route("/wishes")
+@login_required
 def wish():
     back = registration.query.order_by(registration.datetime.desc()).all()
     return render_template("wish.html", back=back)
