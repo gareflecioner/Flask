@@ -4,3 +4,5 @@ https://www.youtube.com/watch?v=RV5o2-UB_dw                                     
 https://pythonru.com/uroki/18-autentifikacija-vo-flask                                                        Create Registration
 https://www.youtube.com/watch?v=U44qKaKpAMk                                                                   жесть
 https://www.youtube.com/watch?v=fNGMsBI0R30                                                                    elasticsearch
+
+https://www.womanandhome.com/life/books/best-books-2021/
