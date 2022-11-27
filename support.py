@@ -6,3 +6,8 @@ https://www.youtube.com/watch?v=U44qKaKpAMk                                     
 https://www.youtube.com/watch?v=fNGMsBI0R30                                                                    elasticsearch
 
 https://www.womanandhome.com/life/books/best-books-2021/
+
+https://learn.javascript.ru
+https://ru.reactjs.org/tutorial/tutorial.html
+https://habr.com/ru/post/450282/
+search engine tf idf
