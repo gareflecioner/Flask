@@ -11,3 +11,4 @@ https://learn.javascript.ru
 https://ru.reactjs.org/tutorial/tutorial.html
 https://habr.com/ru/post/450282/
 search engine tf idf
+https://habr.com/ru/company/ruvds/blog/428077/
