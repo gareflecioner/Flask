@@ -8,6 +8,7 @@ https://www.youtube.com/watch?v=fNGMsBI0R30                                     
 https://www.womanandhome.com/life/books/best-books-2021/
 
 https://learn.javascript.ru
+  https://developer.mozilla.org/ru/docs/Web/JavaScript/Language_Overview#другие_типы
   
   
 https://ru.reactjs.org/tutorial/tutorial.html
