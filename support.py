@@ -12,7 +12,8 @@ https://learn.javascript.ru
   
   
 https://ru.reactjs.org/tutorial/tutorial.html
-https://ru.reactjs.org/docs/getting-started.html  
+https://ru.reactjs.org/docs/getting-started.html
+  https://habr.com/ru/company/ruvds/blog/428077/
   
   
 https://habr.com/ru/post/450282/
