@@ -21,3 +21,5 @@ search engine tf idf
 https://habr.com/ru/company/ruvds/blog/428077/
 
   https://www.youtube.com/watch?v=Iz1NvqG7wTc
+    
+    https://habr.com/ru/post/490754/
